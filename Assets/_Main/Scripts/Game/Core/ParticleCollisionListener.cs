@@ -16,7 +16,7 @@ public class ParticleCollisionListener : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
-        Debug.Log(gameObject.name);
+        Debug.Log(other.name);
         int numCollisionEvents = part.GetCollisionEvents(other, collisionEvents);
 
         for (int i = 0; i < numCollisionEvents; i++)

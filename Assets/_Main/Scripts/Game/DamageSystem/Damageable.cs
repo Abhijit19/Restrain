@@ -165,6 +165,7 @@ public partial class Damageable : MonoBehaviourPun, IPunObservable
 
     private void UpdateHealth()
     {
+        Debug.Log(gameObject.name+" - UpdateHealth : "+currentHitPoints);
         if (!photonView.IsMine)
             return;
 
