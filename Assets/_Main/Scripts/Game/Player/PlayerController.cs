@@ -108,17 +108,22 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (Input.GetButton("Fire1") && m_Abilities[0].CanUse)
         {
+            if (!PhotonNetwork.IsConnected)
+            {
+                RPC_TriggerAbility(0);
+                return;
+            }
             //m_Abilities[0].TriggerAbility();
             //Debug.Log("Fire :"+Time.time);
-            photonView.RPC("RPC_TriggerAbility", RpcTarget.All);
+            photonView.RPC("RPC_TriggerAbility", RpcTarget.All, 0);
         }
     }
 
     [PunRPC]
-    public void RPC_TriggerAbility()
+    public void RPC_TriggerAbility(int index)
     {
         //Debug.Log("RPC Fire :" + Time.time);
-        m_Abilities[0].TriggerAbility();
+        m_Abilities[index].TriggerAbility();
 
     }
     #endregion
