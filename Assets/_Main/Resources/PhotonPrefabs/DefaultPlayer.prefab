@@ -803,7 +803,6 @@ MonoBehaviour:
   defaultMovementSpeed: 5
   gravity: 25
   jumpSpeed: 10
-  aim: {fileID: 1523076865214339614}
   screenUI: {fileID: 6448840345794605655}
   m_Abilities: []
 --- !u!114 &4202370881429204156

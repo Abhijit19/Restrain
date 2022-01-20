@@ -75,6 +75,9 @@ public partial class Damageable : MonoBehaviourPun, IPunObservable
 
     public void ApplyDamage(DamageMessage data)
     {
+        if (!photonView.IsMine)
+            return;
+
         if (currentHitPoints <= 0)
         {//ignore damage if already dead. TODO : may have to change that if we want to detect hit on death...
             return;
@@ -168,8 +171,6 @@ public partial class Damageable : MonoBehaviourPun, IPunObservable
         Debug.Log(gameObject.name+" - UpdateHealth : "+currentHitPoints);
         if (!photonView.IsMine)
             return;
-
-        //currentHitPoints = (int)PhotonNetwork.LocalPlayer.CustomProperties[Constants.PLAYERKEYS.HEALTH];
         Hashtable health = new Hashtable { { Constants.PLAYERKEYS.HEALTH, currentHitPoints } };
         PhotonNetwork.LocalPlayer.SetCustomProperties(health);
     }

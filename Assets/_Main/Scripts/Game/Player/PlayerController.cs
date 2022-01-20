@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private CharacterController controller;
 
-    public GameObject aim;
     public GameObject screenUI;
 
     [Header("Abilities")]
@@ -44,7 +43,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
             //GameObject.Destroy(controller);
         }
         //Set a name to game object
-        gameObject.name = $"{(photonView.Owner.IsLocal?"Local":"Remote")} - {photonView.Owner.ActorNumber}";
+#if UNITY_EDITOR
+        if(photonView != null && photonView.Owner != null)
+            gameObject.name = $"{(photonView.Owner.IsLocal?"Local":"Remote")} - {photonView.Owner.ActorNumber}";
+#endif
     }
 
     private void Update()
@@ -106,9 +108,18 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (Input.GetButton("Fire1") && m_Abilities[0].CanUse)
         {
-            Debug.Log("Fire1");
-            m_Abilities[0].TriggerAbility();
+            //m_Abilities[0].TriggerAbility();
+            //Debug.Log("Fire :"+Time.time);
+            photonView.RPC("RPC_TriggerAbility", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void RPC_TriggerAbility()
+    {
+        //Debug.Log("RPC Fire :" + Time.time);
+        m_Abilities[0].TriggerAbility();
+
     }
     #endregion
 }
