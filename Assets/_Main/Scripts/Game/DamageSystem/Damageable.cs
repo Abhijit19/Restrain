@@ -137,8 +137,6 @@ public partial class Damageable : MonoBehaviourPun, IPunObservable
         forward = Quaternion.AngleAxis(-hitAngle * 0.5f, transform.up) * forward;
         UnityEditor.Handles.DrawSolidArc(transform.position, transform.up, forward, hitAngle, 1.0f);
     }
-
-
 #endif
 
     #region PUN
