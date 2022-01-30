@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParticleGun : UsableItem
+public class ParticleGun : Gun
 {
     [Header("Connections")]
     [SerializeField] ParticleSystem particle = default;
@@ -20,6 +20,17 @@ public class ParticleGun : UsableItem
 
     public override void Use()
     {
+        if (CanUse)
+        {
+            OnItemUse.Invoke(cooldownTime);
+            Shoot();
+            StartCooldown();
+        }
         particle.Play();
+    }
+
+    private void Shoot()
+    {
+
     }
 }

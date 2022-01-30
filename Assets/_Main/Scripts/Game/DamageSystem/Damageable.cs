@@ -110,6 +110,23 @@ public partial class Damageable : MonoBehaviourPun, IPunObservable
             OnReceiveDamage.Invoke();
     }
 
+    public void GainHealth(int amount)
+    {
+        if (!photonView.IsMine)
+            return;
+        if (currentHitPoints <= 0)
+        {//ignore damage if already dead. TODO : may have to change that if we want to detect hit on death...
+            return;
+        }
+
+        //Update the health value
+        currentHitPoints += amount;
+        if (currentHitPoints > maxHitPoints)
+            currentHitPoints = maxHitPoints;
+
+        UpdateHealth();
+    }
+
     void LateUpdate()
     {
         if (schedule != null)
@@ -140,6 +157,17 @@ public partial class Damageable : MonoBehaviourPun, IPunObservable
 #endif
 
     #region PUN
+
+    private void TestGain()
+    {
+        if (!photonView.IsMine)
+            return;
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("Force Gain :" + gameObject.name);
+            GainHealth(20);
+        }
+    }
 
     private void Test()
     {

@@ -6,8 +6,10 @@ public class Constants : MonoBehaviour
 {
     public static class PLAYERKEYS
     {
-        public static string  PLAYER_LOADED_LEVEL = "PlayerLoadedLevel";
+        public static string OPERATOR = "Operator";
+        public static string PLAYER_LOADED_LEVEL = "PlayerLoadedLevel";
         public static string SCORE = "Score";
         public static string HEALTH = "Health";
+        public static string SELECTEDITEM = "ItemIndex";
     }
 }

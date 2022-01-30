@@ -11,7 +11,7 @@ public class HealthUI : MonoBehaviourPunCallbacks
         //UnityEngine.Debug.Log($"HealthUI Target: {targetPlayer.UserId}, View: {photonView.Owner.UserId}, Owner: {gameObject.transform.parent.name}-{gameObject.name}");
         if (changedProps.ContainsKey(Constants.PLAYERKEYS.HEALTH))
         {
-            if(targetPlayer.UserId == photonView.Owner.UserId)
+            if(targetPlayer == photonView.Owner)
             {
                 float health = (int) changedProps[Constants.PLAYERKEYS.HEALTH];
                 health /= 100;

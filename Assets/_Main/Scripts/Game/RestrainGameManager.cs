@@ -126,9 +126,13 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
         Transform spawn = spawnPointHelper.GetSpawnPoint(PhotonNetwork.LocalPlayer.ActorNumber-1);
         Vector3 position = spawn.position;
         Quaternion rotation = spawn.rotation;
+
+        string operatorName = "DefaultPlayer";
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(Constants.PLAYERKEYS.OPERATOR))
+            operatorName = (string)PhotonNetwork.LocalPlayer.CustomProperties[Constants.PLAYERKEYS.OPERATOR];
         
         //TODO: Update the player according to the player data
-        GameObject player = PhotonNetwork.Instantiate("PhotonPrefabs/DefaultPlayer", position, rotation, 0);      // avoid this call on rejoin (ship was network instantiated before)
+        GameObject player = PhotonNetwork.Instantiate($"PhotonPrefabs/{operatorName}", position, rotation, 0);      // avoid this call on rejoin (ship was network instantiated before)
         
         //Raise event
         OnGameStart.Invoke();
