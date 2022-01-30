@@ -129,7 +129,10 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
 
         string operatorName = "DefaultPlayer";
         if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(Constants.PLAYERKEYS.OPERATOR))
+        {
             operatorName = (string)PhotonNetwork.LocalPlayer.CustomProperties[Constants.PLAYERKEYS.OPERATOR];
+            Debug.LogWarning($"Selected Operator {operatorName}");
+        }
         
         //TODO: Update the player according to the player data
         GameObject player = PhotonNetwork.Instantiate($"PhotonPrefabs/{operatorName}", position, rotation, 0);      // avoid this call on rejoin (ship was network instantiated before)
