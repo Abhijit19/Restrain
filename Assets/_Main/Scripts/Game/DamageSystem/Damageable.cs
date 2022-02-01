@@ -116,6 +116,7 @@ public partial class Damageable : MonoBehaviourPun, IPunObservable
             return;
         if (currentHitPoints <= 0)
         {//ignore damage if already dead. TODO : may have to change that if we want to detect hit on death...
+            Debug.Log("Already dead!");
             return;
         }
 

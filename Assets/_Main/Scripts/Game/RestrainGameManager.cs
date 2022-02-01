@@ -13,8 +13,12 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
     public static RestrainGameManager Instance = null;
 
     public UnityEvent OnGameStart;
+    public UnityEvent OnGameEnd;
+
+    public bool IsTesting = false;
 
     private SpawnPointHelper spawnPointHelper;
+    private GameObject player;
 
     #region UNITY
 
@@ -57,7 +61,7 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log("The player disconnected from server. Load the lobby scene");
-        UnityEngine.SceneManagement.SceneManager.LoadScene("LobbyScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
     public override void OnLeftRoom()
@@ -135,7 +139,8 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
         }
         
         //TODO: Update the player according to the player data
-        GameObject player = PhotonNetwork.Instantiate($"PhotonPrefabs/{operatorName}", position, rotation, 0);      // avoid this call on rejoin (ship was network instantiated before)
+        player = PhotonNetwork.Instantiate($"PhotonPrefabs/{operatorName}", position, rotation, 0);      // avoid this call on rejoin (ship was network instantiated before)
+        player.GetComponent<Damageable>()?.OnDeath.AddListener(OnDeath);
         
         //Raise event
         OnGameStart.Invoke();
@@ -206,4 +211,24 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
     {
         StartGame();
     }
+
+    private void OnDeath()
+    {
+        if (IsTesting)
+        {
+            Debug.LogWarning("Nor destroying the player while testing");
+            return;
+        }
+        Debug.Log("Player died!");
+        //Destroy the player object
+        PhotonNetwork.Destroy(player);
+        //Raise event
+        OnGameEnd.Invoke();
+    }
+
+    public void ExitToLobby()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
 }

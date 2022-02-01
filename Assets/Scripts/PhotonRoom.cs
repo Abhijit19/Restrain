@@ -9,30 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class PhotonRoom : MonoBehaviourPunCallbacks,IInRoomCallbacks
 {
-    public static PhotonRoom photonRoom;
-    PhotonView pv;
     public int multiplayscene;
-    int currentscene;
-    private void Awake()
-    {
-        if(PhotonRoom.photonRoom==null)
-        {
-            PhotonRoom.photonRoom = this;
-        }
-        else
-        {
-            if (PhotonRoom.photonRoom != this)
-            {
-                Destroy(PhotonRoom.photonRoom.gameObject);
-                PhotonRoom.photonRoom = this;
-            }
-        }
-        //DontDestroyOnLoad(this.gameObject);
-    }
-    private void Start()
-    {
-        pv = GetComponent<PhotonView>();
-    }
 
     public override void OnEnable()
     {
@@ -62,17 +39,12 @@ public class PhotonRoom : MonoBehaviourPunCallbacks,IInRoomCallbacks
     }
     void onscenefinishloading(Scene scene,LoadSceneMode mode)
     {
-        currentscene = scene.buildIndex;
-        if(currentscene == multiplayscene)
-        {
-            createplayer();
-        }
     }
-    void createplayer()
+
+    public override void OnLeftRoom()
     {
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerAvatar"),
-            transform.position,
-            Quaternion.identity);
+        base.OnLeftRoom();
+        PhotonNetwork.LoadLevel(0);
     }
 
 }

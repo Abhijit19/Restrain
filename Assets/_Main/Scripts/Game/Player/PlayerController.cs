@@ -98,4 +98,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
         #endregion
         
     }
+
+    public void OnDeath()
+    {
+        if (!photonView.IsMine)
+            return;
+        Debug.Log("Player died!");
+    }
 }

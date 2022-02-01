@@ -15,7 +15,7 @@ PrefabInstance:
     - target: {fileID: 7318784072888251360, guid: ccfcd8766bcf88a4880f2e04f7ef976a,
         type: 3}
       propertyPath: m_Name
-      value: DefaultPlayerCircle
+      value: DefaultPlayerSphere
       objectReference: {fileID: 0}
     - target: {fileID: 7318784072888251362, guid: ccfcd8766bcf88a4880f2e04f7ef976a,
         type: 3}
