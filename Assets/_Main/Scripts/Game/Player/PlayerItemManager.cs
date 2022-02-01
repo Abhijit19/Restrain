@@ -33,11 +33,11 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks
     {
         if (!photonView.IsMine)
             return;
-        AbilityUpdate();
+        ItemUpdate();
     }
 
     #region Abilities
-    void AbilityUpdate()
+    void ItemUpdate()
     {
         //Equip Items
         for (int i = 0; i < usableItems.Length; i++)

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ForceShieldItem : ConsumableItem
 {
+    [Header("ForceShield Item Info")]
     public GameObject shieldModel;
     public float shieldTime = 10;
     private Coroutine coroutine;

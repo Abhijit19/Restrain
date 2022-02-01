@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HealthItem : ConsumableItem
 {
+    [Header("Health Item Info")]
     public int amount = 40;
     public override void Equip()
     {

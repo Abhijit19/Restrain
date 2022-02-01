@@ -765,7 +765,7 @@ MonoBehaviour:
   OnItemUse:
     m_PersistentCalls:
       m_Calls: []
-  title: SingleShot
+  title: SingleShotAuto
   icon: {fileID: 0}
   cooldownTime: 0.1
   isContinuesUse: 1
@@ -812,6 +812,7 @@ MonoBehaviour:
   cooldownTime: 1
   isContinuesUse: 0
   holdingCapacity: 4
+  holding: 0
   amount: 40
 --- !u!114 &535497639
 MonoBehaviour:
@@ -833,6 +834,7 @@ MonoBehaviour:
   cooldownTime: 1
   isContinuesUse: 0
   holdingCapacity: 4
+  holding: 0
   shieldModel: {fileID: 2142319533}
   shieldTime: 10
 --- !u!1 &4202370882638462349

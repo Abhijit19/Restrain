@@ -8,6 +8,7 @@ public abstract class ConsumableItem : Item, IPunObservable
     [Header("Consumable Item Info")]
     [SerializeField]
     protected int holdingCapacity = 4;
+    [SerializeField]
     protected int holding = 0;
     public abstract override void Equip();
 
