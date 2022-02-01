@@ -15,8 +15,20 @@ public class HealthItem : ConsumableItem
 
     public override void Use()
     {
-        //Check if we have health left to consume
-        //Do consume health
+        //Check if we can use
+        if (!CanUse)
+            return;
+        
+        //if (holding > 0)
+        {
+            StartCooldown();
+            Consume();
+        }
+    }
+
+    public void Consume()
+    {
+        holding--;
         Damageable damageable = GetComponent<Damageable>();
         damageable.GainHealth(amount);
     }

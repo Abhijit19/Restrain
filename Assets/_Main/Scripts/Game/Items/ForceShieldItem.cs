@@ -17,7 +17,14 @@ public class ForceShieldItem : ConsumableItem
 
     public override void Use()
     {
-        ShieldCooldown();
+        if (!CanUse)
+            return;
+
+        //if (holding > 0)
+        {
+            StartCooldown();
+            ShieldCooldown();
+        }
     }
 
     private void ShieldCooldown()

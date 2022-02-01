@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.Events;
 
 public class PlayerItemManager : MonoBehaviourPunCallbacks
 {
@@ -11,6 +12,8 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks
     public Item[] usableItems;
     private int itemIndex = -1;
     private int previousItemIndex = -1;
+
+    public ItemEvent OnItemEquip;
 
     private void Awake()
     {
@@ -101,6 +104,8 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks
             Hashtable hash = new Hashtable();
             hash.Add(Constants.PLAYERKEYS.SELECTEDITEM, itemIndex);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+            OnItemEquip.Invoke(usableItems[itemIndex]);
         }
     }
 
@@ -120,4 +125,8 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks
 
     }
     #endregion
+
+    [System.Serializable]
+    public class ItemEvent : UnityEvent<Item>{}
+
 }
