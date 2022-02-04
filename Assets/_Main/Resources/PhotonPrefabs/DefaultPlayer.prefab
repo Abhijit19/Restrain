@@ -400,7 +400,7 @@ GameObject:
   - component: {fileID: 2108803986871096599}
   - component: {fileID: 2405851993977473430}
   m_Layer: 5
-  m_Name: HealthGroup (1)
+  m_Name: UsableItems
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -653,7 +653,7 @@ MonoBehaviour:
   - {fileID: 562264895026461830}
   - {fileID: 535497639}
   - {fileID: 3599272839316137970}
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &4202370881429204146
@@ -703,6 +703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7e506b6f1f82cc4fadcfc540a16ae61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allItems: []
   usableItems: []
   OnItemEquip:
     m_PersistentCalls:
@@ -710,6 +711,36 @@ MonoBehaviour:
       - m_Target: {fileID: 2405851993977473430}
         m_TargetAssemblyTypeName: ItemInfoUI, Assembly-CSharp
         m_MethodName: OnItemEquip
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnItemUse:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2405851993977473430}
+        m_TargetAssemblyTypeName: ItemInfoUI, Assembly-CSharp
+        m_MethodName: OnItemUse
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnItemPickedUp:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2405851993977473430}
+        m_TargetAssemblyTypeName: ItemInfoUI, Assembly-CSharp
+        m_MethodName: OnItemPickedUp
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1086,7 +1117,7 @@ GameObject:
   - component: {fileID: 7679299654664384462}
   - component: {fileID: 8859251668644440783}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: EmptySlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1140,7 +1171,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Health Kit
+  m_text: Empty
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1775,7 +1806,7 @@ PrefabInstance:
     - target: {fileID: 2267972063712573336, guid: 8a6022dfb366cbb4a9037287ac958491,
         type: 3}
       propertyPath: damageAmount
-      value: 50
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2267972063712573337, guid: 8a6022dfb366cbb4a9037287ac958491,
         type: 3}

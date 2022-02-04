@@ -17,7 +17,7 @@ public abstract class Item : MonoBehaviour
     private bool isContinuesUse = false;
     private bool canUse = true;
 
-    public bool CanUse { get { return canUse; } }
+    public bool CanUse { get { return canUse; } protected set { canUse = value; } }
     public bool IsContinuesUse { get { return isContinuesUse; } }
 
     public abstract void Use();

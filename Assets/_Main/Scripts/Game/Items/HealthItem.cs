@@ -20,10 +20,15 @@ public class HealthItem : ConsumableItem
         if (!CanUse)
             return;
         
-        //if (holding > 0)
+        if (holding > 0)
         {
-            StartCooldown();
+            
             Consume();
+            //We we have more items, then use cooldown
+            if (holding > 0)
+                StartCooldown();
+            else
+                CanUse = false;
         }
     }
 

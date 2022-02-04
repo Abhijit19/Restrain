@@ -21,16 +21,22 @@ public class ForceShieldItem : ConsumableItem
         if (!CanUse)
             return;
 
-        //if (holding > 0)
+        if (holding > 0)
         {
-            StartCooldown();
-            ShieldCooldown();
+
+            Consume();
+            //We we have more items, then use cooldown
+            if (holding > 0)
+                StartCooldown();
+            else
+                CanUse = false;
         }
     }
 
-    private void ShieldCooldown()
+    public void Consume()
     {
-        if(coroutine !=null)
+        holding--;
+        if (coroutine != null)
             StopCoroutine(coroutine);
         coroutine = StartCoroutine(Cooldown());
         IEnumerator Cooldown()

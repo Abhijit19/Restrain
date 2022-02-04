@@ -9,21 +9,24 @@ using UnityEngine.Events;
 public class PlayerItemManager : MonoBehaviourPunCallbacks
 {
     [Header("Usable Items")]
-    public Item[] usableItems;
+    public Item[] allItems;
+    public List<Item> usableItems;
     private int itemIndex = -1;
     private int previousItemIndex = -1;
 
     public ItemEvent OnItemEquip;
+    public ItemEvent OnItemUse;
+    public ItemEvent OnItemPickedUp;
 
     private void Awake()
     {
-        usableItems = GetComponents<Item>();
+        allItems = GetComponents<Item>();
         
     }
 
     private void Start()
     {
-        if (usableItems.Length > 0)
+        if (usableItems.Count > 0)
         {
             EquipItem(0);
         }
@@ -39,8 +42,11 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks
     #region Abilities
     void ItemUpdate()
     {
+        if (usableItems.Count == 0)
+            return;
+
         //Equip Items
-        for (int i = 0; i < usableItems.Length; i++)
+        for (int i = 0; i < usableItems.Count; i++)
         {
             if (Input.GetKeyDown((i + 1).ToString()))
             {
@@ -51,7 +57,7 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks
 
         if (Input.GetAxisRaw("Mouse ScrollWheel") > 0)
         {
-            if (itemIndex >= usableItems.Length - 1)
+            if (itemIndex >= usableItems.Count - 1)
                 EquipItem(0);
             else
                 EquipItem(itemIndex + 1);
@@ -59,7 +65,7 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks
         else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0)
         {
             if (itemIndex <= 0)
-                EquipItem(usableItems.Length - 1);
+                EquipItem(usableItems.Count - 1);
             else
                 EquipItem(itemIndex - 1);
         }
@@ -123,6 +129,55 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks
         //Debug.Log("RPC Fire :" + Time.time);
         usableItems[index].Use();
 
+        //raise event 
+        if (photonView.IsMine)
+            OnItemUse.Invoke(usableItems[index]);
+
+    }
+    #endregion
+
+    #region PICKUP
+    public bool OnItemPickUp(string itemName)
+    {
+        Item pickedItem = FindItem(itemName);
+        if (!pickedItem)
+        {
+            Debug.LogWarning("Invalid item picked up "+itemName);
+            return false;
+        }
+        //If we picked a consumable item
+        if(pickedItem is ConsumableItem)
+        {
+            Debug.Log("Consumable");
+            ((ConsumableItem)pickedItem).Add(1);
+        }
+
+        if (usableItems.Contains(pickedItem))
+        {
+            Debug.Log("Already contains item");
+        }
+        else
+        {
+            usableItems.Add(pickedItem);
+            if (usableItems.Count == 1)
+                EquipItem(0);
+        }
+        OnItemPickedUp.Invoke(pickedItem);
+        return true;
+    }
+
+    private Item FindItem(string itemName)
+    {
+        Item found = null;
+        for (int i = 0; i < allItems.Length; i++)
+        {
+            if (allItems[i].title.Equals(itemName, System.StringComparison.InvariantCultureIgnoreCase))
+            {
+                found = allItems[i];
+                break;
+            }
+        }
+        return found;
     }
     #endregion
 

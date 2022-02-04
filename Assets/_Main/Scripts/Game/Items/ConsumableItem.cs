@@ -27,4 +27,17 @@ public abstract class ConsumableItem : Item, IPunObservable
     public abstract override void Unequip();
 
     public abstract override void Use();
+
+    public virtual void Add(int count = 1)
+    {
+        if (holding + count < holdingCapacity + 1)
+            holding += count;
+        else
+            holding = holdingCapacity;
+    }
+
+    public int GetHolding()
+    {
+        return holding;
+    }
 }
