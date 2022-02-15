@@ -561,7 +561,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4202370881171610415}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!1 &4202370881429204159
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,11 +649,12 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 4202370881429204146}
+  - {fileID: 667316578}
   - {fileID: 2454230847801094541}
   - {fileID: 562264895026461830}
   - {fileID: 535497639}
   - {fileID: 3599272839316137970}
-  sceneViewId: 1
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &4202370881429204146
@@ -684,6 +685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf9ff078afe83844aae7b292a512ef4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isControllable: 1
   headTarget: {fileID: 7340563368028349942}
   cameraHolder: {fileID: 6992800130905144088}
   mouseSensitivity: 5

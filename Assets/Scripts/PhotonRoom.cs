@@ -47,4 +47,8 @@ public class PhotonRoom : MonoBehaviourPunCallbacks,IInRoomCallbacks
         PhotonNetwork.LoadLevel(0);
     }
 
+    public void OnZoneSelected(int index)
+    {
+        multiplayscene = index;
+    }
 }

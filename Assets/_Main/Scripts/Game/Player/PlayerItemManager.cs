@@ -6,7 +6,7 @@ using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.Events;
 
-public class PlayerItemManager : MonoBehaviourPunCallbacks
+public class PlayerItemManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     [Header("Usable Items")]
     public Item[] allItems;
@@ -137,16 +137,18 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region PICKUP
-    public bool OnItemPickUp(string itemName)
+
+    [PunRPC]
+    public void RPC_OnItemPickUp(string itemName)
     {
         Item pickedItem = FindItem(itemName);
         if (!pickedItem)
         {
-            Debug.LogWarning("Invalid item picked up "+itemName);
-            return false;
+            Debug.LogWarning("Invalid item picked up " + itemName);
+            return;
         }
         //If we picked a consumable item
-        if(pickedItem is ConsumableItem)
+        if (pickedItem is ConsumableItem)
         {
             Debug.Log("Consumable");
             ((ConsumableItem)pickedItem).Add(1);
@@ -162,7 +164,31 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks
             if (usableItems.Count == 1)
                 EquipItem(0);
         }
-        OnItemPickedUp.Invoke(pickedItem);
+
+        //Raise event
+        if(photonView.IsMine)
+            OnItemPickedUp.Invoke(pickedItem);
+    }
+    public bool OnItemPickUp(string itemName)
+    {
+        if (!photonView.IsMine)
+            return true;
+
+        Item pickedItem = FindItem(itemName);
+        if (!pickedItem)
+        {
+            Debug.LogWarning("Invalid item picked up "+itemName);
+            return false;
+        }
+
+        if (!PhotonNetwork.IsConnected)
+        {
+            RPC_OnItemPickUp(itemName);
+            return true;
+        }
+        //m_Abilities[0].TriggerAbility();
+        //Debug.Log("Fire :"+Time.time);
+        photonView.RPC("RPC_OnItemPickUp", RpcTarget.All, itemName);
         return true;
     }
 
@@ -178,6 +204,18 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks
             }
         }
         return found;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(usableItems);
+        }
+        else
+        {
+            usableItems = (List<Item>)stream.ReceiveNext();
+        }
     }
     #endregion
 
