@@ -49,6 +49,9 @@ public class PhotonRoom : MonoBehaviourPunCallbacks,IInRoomCallbacks
 
     public void OnZoneSelected(int index)
     {
-        multiplayscene = index;
+        if(index == 0)
+            multiplayscene = 1;
+        else
+            multiplayscene = 2;
     }
 }

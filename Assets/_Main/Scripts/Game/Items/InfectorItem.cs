@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class InfectorItem : ConsumableItem
 {
@@ -39,7 +40,15 @@ public class InfectorItem : ConsumableItem
         coroutine = StartCoroutine(Cooldown());
         IEnumerator Cooldown()
         {
-            TankMovement tank = GameObject.FindObjectOfType<TankMovement>();
+            //If not the owener, skip
+            PhotonView view = GetComponent<PhotonView>();
+            if (!view.IsMine)
+                yield break;
+
+            InfectorSpawnManager manager = FindObjectOfType<InfectorSpawnManager>();
+            GameObject infector = manager.SpawnInfector();
+
+            TankMovement tank = infector.GetComponent<TankMovement>();
             if (tank != null)
             {
                 GetComponent<PlayerController>().Deactivate();

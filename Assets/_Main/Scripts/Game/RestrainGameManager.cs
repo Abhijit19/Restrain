@@ -140,12 +140,16 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
         
         //TODO: Update the player according to the player data
         player = PhotonNetwork.Instantiate($"PhotonPrefabs/{operatorName}", position, rotation, 0);      // avoid this call on rejoin (ship was network instantiated before)
-        player.GetComponent<Damageable>()?.OnDeath.AddListener(OnDeath);
+        //player.GetComponent<Damageable>()?.OnDeath.AddListener(OnDeath);
 
         if (PhotonNetwork.IsMasterClient)
         {
             Debug.Log("IsMasterClient");
-            
+
+        }
+        else
+        {
+            Debug.Log("NotMasterClient");
         }
 
         //Raise event

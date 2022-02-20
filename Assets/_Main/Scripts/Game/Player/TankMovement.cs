@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TankMovement : MonoBehaviour
+public class TankMovement : MonoBehaviourPunCallbacks
 {
     public bool isControllable = false;
     [SerializeField] GameObject cameraHolder;
@@ -41,6 +42,11 @@ public class TankMovement : MonoBehaviour
 
         // Store the original pitch of the audio source.
         m_OriginalPitch = m_MovementAudio.pitch;
+
+#if UNITY_EDITOR
+        if (photonView != null && photonView.Owner != null)
+            gameObject.name = gameObject.name +  $"{(photonView.Owner.IsLocal ? "Local" : "Remote")} - {photonView.Owner.ActorNumber}";
+#endif
     }
 
     private void Update()
@@ -100,6 +106,9 @@ public class TankMovement : MonoBehaviour
     [ContextMenu("Activate")]
     public void Activate()
     {
+        if (!photonView.IsMine)
+            return;
+
         isControllable = true;
         cameraHolder.gameObject.SetActive(true);
         // Also reset the input values.

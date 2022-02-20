@@ -8,6 +8,10 @@ public class ZoneSelectorUI : MonoBehaviour
     public Button[] zones;
     public ColorBlock normalColor;
     public ColorBlock selectedColor;
+
+    public string LevelSelecetd = "LEVEL_SELECTED";
+
+    public PhotonRoom photonRoom;
     private void Start()
     {
         if (zones == null || zones.Length == 0)
@@ -17,17 +21,25 @@ public class ZoneSelectorUI : MonoBehaviour
         for (int i = 0; i < zones.Length; i++)
         {
             int current = i;
-            zones[i].onClick.AddListener(()=>OnButtonSelected(zones[current]));
+            zones[i].onClick.AddListener(()=>OnButtonSelected(current));
         }
+
+        int selected = PlayerPrefs.GetInt(LevelSelecetd, 0);
+        OnButtonSelected(selected);
     }
 
-    private void OnButtonSelected(Button selected)
+    private void OnButtonSelected(int selected)
     {
+        PlayerPrefs.SetInt(LevelSelecetd, selected);
+        PlayerPrefs.Save();
+
+        photonRoom.OnZoneSelected(selected);
+
         for (int i = 0; i < zones.Length; i++)
         {
             zones[i].GetComponent<Image>().color = Color.white;
         }
 
-        selected.GetComponent<Image>().color = Color.blue;
+        zones[selected].GetComponent<Image>().color = Color.blue;
     }
 }

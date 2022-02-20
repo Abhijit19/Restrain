@@ -11,6 +11,7 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks, IPunObservable
     [Header("Usable Items")]
     public Item[] allItems;
     public List<Item> usableItems;
+    public List<int> usableIndex = new List<int>();
     private int itemIndex = -1;
     private int previousItemIndex = -1;
 
@@ -93,6 +94,7 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private void EquipItem(int itemIndex)
     {
+        Debug.Log("EquipItem");
         //If we are changing to the same item, then skip it
         if (this.itemIndex == itemIndex)
             return;
@@ -112,7 +114,11 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks, IPunObservable
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
             OnItemEquip.Invoke(usableItems[itemIndex]);
+
+            Debug.Log(" Send EquipItem");
         }
+
+        
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -206,17 +212,31 @@ public class PlayerItemManager : MonoBehaviourPunCallbacks, IPunObservable
         return found;
     }
 
+    /*
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
+    }
+    */
+
+    
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        return;
         if (stream.IsWriting)
         {
-            stream.SendNext(usableItems);
+            stream.SendNext(usableIndex);
         }
         else
         {
-            usableItems = (List<Item>)stream.ReceiveNext();
+            usableIndex = (List<int>)stream.ReceiveNext();
+            for (int i = 0; i < usableIndex.Count; i++)
+            {
+                usableItems.Clear();
+                usableItems.Add(allItems[usableIndex[i]]);
+            }
         }
     }
+    
     #endregion
 
     [System.Serializable]

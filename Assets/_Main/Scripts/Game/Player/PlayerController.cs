@@ -108,6 +108,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public void Activate()
     {
+        if (!photonView.IsMine)
+            return;
         isControllable = true;
         cameraHolder.gameObject.SetActive(true);
         // Also reset the input values.
@@ -116,6 +118,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public void Deactivate()
     {
+        if (!photonView.IsMine)
+            return;
         isControllable = false;
         cameraHolder.gameObject.SetActive(false);
         // Also reset the input values.

@@ -41,9 +41,9 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - RPC_addchar
+  - RPC_OnItemPickUp
   - RPC_takeDamage
   - RPC_TriggerAbility
-  - RPC_OnItemPickUp
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
