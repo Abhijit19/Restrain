@@ -99,13 +99,17 @@ public class Photon_lobby : MonoBehaviourPunCallbacks, ILobbyCallbacks
     }
     
 
-  public  void CreateRoom()
+    public  void CreateRoom()
     {
         Debug.Log("New room created");
-       
         RoomOptions roomOps = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 5 };
         PhotonNetwork.CreateRoom(room_name, roomOps);
         
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
     }
     
     public  void onroomnamechanged()

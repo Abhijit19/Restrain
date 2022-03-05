@@ -84,7 +84,8 @@ namespace Photon.Pun.UtilityScripts
             if (!this.isTimerRunning) return;
 
             float countdown = TimeRemaining();
-            this.Text.text = string.Format("Game starts in {0} seconds", countdown.ToString("n0"));
+            if(this.Text != null)
+                this.Text.text = string.Format("Game starts in {0} seconds", countdown.ToString("n0"));
 
             if (countdown > 0.0f) return;
 
@@ -96,6 +97,7 @@ namespace Photon.Pun.UtilityScripts
         {
             this.isTimerRunning = true;
             this.enabled = true;
+            IsTimerRunning = true;
         }
 
         private void OnTimerEnds()
@@ -104,9 +106,11 @@ namespace Photon.Pun.UtilityScripts
             this.enabled = false;
 
             Debug.Log("Emptying info text.", this.Text);
-            this.Text.text = string.Empty;
+            if(this.Text != null)
+                this.Text.text = string.Empty;
 
             if (OnCountdownTimerHasExpired != null) OnCountdownTimerHasExpired();
+            IsTimerRunning = false;
         }
 
 
@@ -172,5 +176,7 @@ namespace Photon.Pun.UtilityScripts
 
             Debug.Log("Set Custom Props for Time: "+ props.ToStringFull() + " wasSet: "+wasSet);
         }
+
+        public static bool IsTimerRunning = true;
     }
 }

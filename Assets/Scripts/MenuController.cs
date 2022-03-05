@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MenuController : MonoBehaviour
 {
- public   void onclickplayerselect(int whichchar)
+    public void onclickplayerselect(int whichchar)
     {
         if (PlayerInfo.playerinfo != null)
         {
@@ -12,4 +12,6 @@ public class MenuController : MonoBehaviour
             PlayerPrefs.SetInt("Mychar", whichchar);
         }
     }
+
+   
 }
