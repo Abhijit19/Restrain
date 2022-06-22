@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Damager : MonoBehaviour
 {
-    public int damageAmount = 1;
+    public int damageRate = 1;      //Damage per second
     public bool stopCamera = false;
     public bool canDamage = true;
 
@@ -14,33 +14,32 @@ public class Damager : MonoBehaviour
         //GetComponent<Collider>().isTrigger = true;
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (!canDamage)
-            return;
+        CheckForDamage(collision.gameObject);
+    }
 
-        Debug.Log(collision.gameObject.name);
-        var d = collision.gameObject.GetComponent<Damageable>();
-        if (d == null)
-            return;
-
-        Debug.Log("Damage "+collision.gameObject.name);
-        return;
-
-        var msg = new Damageable.DamageMessage()
-        {
-            amount = damageAmount,
-            damager = this,
-            direction = Vector3.up,
-            stopCamera = stopCamera
-        };
-
-        d.ApplyDamage(msg);
+    private void OnCollisionStay(Collision collision)
+    {
+        CheckForDamage(collision.gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        CheckForDamage(other.gameObject);
+    }
 
+    private void OnTriggerStay(Collider other)
+    {
+        CheckForDamage(other.gameObject);
+    }
+
+
+    private float lastDamageTime = 0;
+    private float damageDelay = 1;
+
+    private void CheckForDamage(GameObject other)
+    {
         if (!canDamage)
             return;
 
@@ -48,7 +47,18 @@ public class Damager : MonoBehaviour
         if (d == null)
             return;
 
-        Debug.Log(other.gameObject.name);
+        ApplyDamage(d, damageRate);
+    }
+
+    private void ApplyDamage(Damageable d, int damageAmount)
+    {
+        //Damage delay check
+        if (Time.time - lastDamageTime < damageDelay)
+            return;
+
+        lastDamageTime = Time.time;
+
+        Debug.Log($"Damage {d.gameObject.name}, amount {damageAmount}");
 
         var msg = new Damageable.DamageMessage()
         {

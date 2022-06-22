@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f3a268be345bf43b587c02987158f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 100
+  damageRate: 25
   stopCamera: 0
   canDamage: 1
 --- !u!114 &7241826502553155198

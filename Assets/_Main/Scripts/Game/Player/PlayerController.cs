@@ -130,5 +130,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (!photonView.IsMine)
             return;
         Debug.Log("Player died!");
+        GameEndReason("Attacker Won");
+    }
+
+    private void GameEndReason(string reason)
+    {
+        Hashtable props = new Hashtable
+        {
+            {"GameSatate", (int)2},
+            {"Reason", reason}
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }
 }
