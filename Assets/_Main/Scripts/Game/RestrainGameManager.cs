@@ -32,6 +32,7 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
     public override void OnEnable()
     {
         base.OnEnable();
+        Debug.Log($"RestrainGameManager IsTimerRunning : {CountdownTimer.IsTimerRunning}");
         CountdownTimer.OnCountdownTimerHasExpired += OnCountdownTimerIsExpired;
         if (!CountdownTimer.IsTimerRunning)
             StartGame();

@@ -97,7 +97,6 @@ namespace Photon.Pun.UtilityScripts
         {
             this.isTimerRunning = true;
             this.enabled = true;
-            IsTimerRunning = true;
         }
 
         private void OnTimerEnds()
@@ -110,7 +109,6 @@ namespace Photon.Pun.UtilityScripts
                 this.Text.text = string.Empty;
 
             if (OnCountdownTimerHasExpired != null) OnCountdownTimerHasExpired();
-            IsTimerRunning = false;
         }
 
 
@@ -177,6 +175,18 @@ namespace Photon.Pun.UtilityScripts
             Debug.Log("Set Custom Props for Time: "+ props.ToStringFull() + " wasSet: "+wasSet);
         }
 
-        public static bool IsTimerRunning = true;
+        private static CountdownTimer _instance;
+        public static CountdownTimer instance
+        {
+            get { 
+                if (_instance == null)
+                    _instance = FindObjectOfType<CountdownTimer>();
+                return _instance;
+            }
+        }
+        public static bool IsTimerRunning
+        {
+            get { return (instance != null || instance.isTimerRunning); }
+        }
     }
 }

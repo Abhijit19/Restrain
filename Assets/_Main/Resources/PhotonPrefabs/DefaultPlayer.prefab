@@ -1001,7 +1001,7 @@ MonoBehaviour:
   isContinuesUse: 0
   holdingCapacity: 4
   holding: 0
-  abilityTime: 60
+  abilityTime: 30
 --- !u!114 &5123896087261811519
 MonoBehaviour:
   m_ObjectHideFlags: 0
