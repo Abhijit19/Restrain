@@ -5340,7 +5340,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  IsTesting: 1
+  IsTesting: 0
 --- !u!4 &152602932
 Transform:
   m_ObjectHideFlags: 0
@@ -5385,6 +5385,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Text: {fileID: 2106740207}
   timerMessage: Time left
+  duration: 60
+  OnTimerFinish:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 152602931}
+        m_TargetAssemblyTypeName: RestrainGameManager, Assembly-CSharp
+        m_MethodName: OnLevelTimerFinish
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &186524190
 GameObject:
   m_ObjectHideFlags: 0
@@ -15870,6 +15886,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   infoGroup: {fileID: 561697481}
   gameOverGroup: {fileID: 760217294}
+  reason: {fileID: 1363869818}
   levelTimerGroup: {fileID: 1654861742}
 --- !u!1 &741813058
 GameObject:

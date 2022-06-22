@@ -117,6 +117,12 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
 
     }
 
+    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+    {
+        Debug.Log("RestrainGameManager.OnRoomPropertiesUpdate " + propertiesThatChanged.ToStringFull());
+        OnGameStateChange();
+    }
+
     #endregion
 
     // called by OnCountdownTimerIsExpired() when the timer ended
@@ -222,14 +228,65 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
         StartGame();
     }
 
-    private void OnDeath()
+    public void OnDeath()
     {
         if (IsTesting)
         {
-            Debug.LogWarning("Nor destroying the player while testing");
+            Debug.LogWarning("Not destroying the player while testing");
             return;
         }
         Debug.Log("Player died!");
+        GameEndReason("Attacker Won");
+    }
+
+    public  void OnLevelTimerFinish()
+    {
+        if (IsTesting)
+        {
+            Debug.LogWarning("Not destroying the player while testing");
+            return;
+        }
+        Debug.Log("Timer ended!");
+        GameEndReason("Timer Ended");
+    }
+
+    public void OnDefend()
+    {
+        if (IsTesting)
+        {
+            Debug.LogWarning("Not destroying the player while testing");
+            return;
+        }
+
+        GameEndReason("Defender Won");
+    }
+
+    private void GameEndReason(string reason)
+    {
+        Hashtable props = new Hashtable
+        {
+            {"GameSatate", (int)2},
+            {"Reason", reason}
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+    }
+
+    private void OnGameStateChange()
+    {
+        object gameStateFromProps;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("GameSatate", out gameStateFromProps))
+        {
+            int gamestate = (int)gameStateFromProps;
+            if(gamestate == 2)
+            {
+                //Game Over
+                OnGameOver();
+            }
+        }
+    }
+
+    private void OnGameOver()
+    {
         //Destroy the player object
         PhotonNetwork.Destroy(player);
         //Raise event

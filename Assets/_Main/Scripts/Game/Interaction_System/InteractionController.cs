@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractionController : MonoBehaviour
+public class InteractionController : MonoBehaviourPun
 {
     public bool IsActive = true;
     [Space, Header("Data")]
@@ -33,6 +34,9 @@ public class InteractionController : MonoBehaviour
 
     void Update()
     {
+        if (!photonView.IsMine)
+            return;
+
         if (IsActive)
         {
             CheckForInteractable();

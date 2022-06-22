@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class LevelTimer : MonoBehaviour
@@ -10,6 +11,8 @@ public class LevelTimer : MonoBehaviour
     public string timerMessage = "Time left";
     public float duration = 60;
     private ServerTimer serverTimer;
+
+    public UnityEvent OnTimerFinish;
 
     // Start is called before the first frame update
     void Start()
@@ -39,5 +42,6 @@ public class LevelTimer : MonoBehaviour
     private void ServerTimer_OnTimerEnd()
     {
         Debug.Log("Timer End");
+        OnTimerFinish.Invoke();
     }
 }
