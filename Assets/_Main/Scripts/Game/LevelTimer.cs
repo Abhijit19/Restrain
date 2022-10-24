@@ -8,8 +8,11 @@ public class LevelTimer : MonoBehaviour
 {
     [Header("Reference to a Text component for visualizing the countdown")]
     public Text Text;
+    
     public string timerMessage = "Time left";
     public float duration = 60;
+    [SerializeField]
+    private string TIMER_KEY = "Level1Timer";
     private ServerTimer serverTimer;
 
     public UnityEvent OnTimerFinish;
@@ -26,22 +29,29 @@ public class LevelTimer : MonoBehaviour
         {
             serverTimer.Tick(Time.deltaTime);
             //Debug.Log(serverTimer.RemainingSeconds);
-            Text.text = string.Format("{0} : {1:#0.00}", timerMessage, serverTimer.RemainingSeconds);
+            Text.text = string.Format("{0} : {1:#0.00}", timerMessage, serverTimer?.RemainingSeconds);
         }
     }
 
     public void OnLevelStart()
     {
         Debug.Log("Starting Timer");
-        serverTimer = new ServerTimer("Level1Timer", duration);
+        serverTimer = new ServerTimer(TIMER_KEY, duration, true);
         serverTimer.OnTimerEnd += ServerTimer_OnTimerEnd;
         serverTimer.SetStartTime();
         
+    }
+
+    public void OnTimerReset()
+    {
+        if (serverTimer != null)
+            serverTimer = null;
     }
 
     private void ServerTimer_OnTimerEnd()
     {
         Debug.Log("Timer End");
         OnTimerFinish.Invoke();
+        serverTimer = null;
     }
 }

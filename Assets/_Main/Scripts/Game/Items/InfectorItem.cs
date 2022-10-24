@@ -60,6 +60,8 @@ public class InfectorItem : ConsumableItem
                 GetComponent<PlayerController>().Activate();
                 tank.Deactivate();
             }
+
+            manager.RemoveInfector();
         }
     }
 }

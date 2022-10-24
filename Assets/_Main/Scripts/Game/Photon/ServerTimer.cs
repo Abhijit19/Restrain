@@ -13,12 +13,14 @@ public class ServerTimer
     public string TimerKey = "Timer";
 
     private int startTime;
+    private bool forceRestart = false;
 
-    public ServerTimer(string key, float duration)
+    public ServerTimer(string key, float duration, bool forceRestart = true)
     {
         TimerKey = key;
         Duration = duration;
         RemainingSeconds = duration;
+        this.forceRestart = forceRestart;
     }
 
     public event Action OnTimerEnd;
@@ -63,15 +65,19 @@ public class ServerTimer
     public void SetStartTime()
     {
         int startTimestamp = 0;
-        bool wasSet = TryGetStartTime(out startTimestamp);
 
-        if (wasSet)
+        if (!forceRestart)
         {
-            Debug.Log("Using already set timer!");
-            startTime = startTimestamp;
-            return;
-        }
+            forceRestart = false;
+            bool wasSet = TryGetStartTime(out startTimestamp);
 
+            if (wasSet)
+            {
+                Debug.Log("Using already set timer!");
+                startTime = startTimestamp;
+                return;
+            }
+        }
         Debug.Log("Setting timer!");
         startTime = PhotonNetwork.ServerTimestamp;
         //Set the start time property

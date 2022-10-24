@@ -7,6 +7,7 @@ using Photon.Realtime;
 using Photon.Pun.UtilityScripts;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.Events;
+using System;
 
 public class RestrainGameManager : MonoBehaviourPunCallbacks
 {
@@ -15,10 +16,18 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
     public UnityEvent OnGameStart;
     public UnityEvent OnGameEnd;
 
+    public UnityEvent OnRoundStart;
+    public UnityEvent OnRoundEnd;
+
     public bool IsTesting = false;
 
     private SpawnPointHelper spawnPointHelper;
     private GameObject player;
+
+    public const string GAMESTATE_KEY = "GameState";
+    public const string ATTACKER_SCORE_KEY = "ATTACKER_SCORE";
+    public const string DEFENDER_SCORE_KEY = "DEFENDER_SCORE";
+    public const string ROUND_WINNER_KEY = "ROUND_WINNER";
 
     #region UNITY
 
@@ -121,7 +130,12 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {
         Debug.Log("RestrainGameManager.OnRoomPropertiesUpdate " + propertiesThatChanged.ToStringFull());
-        OnGameStateChange();
+
+        //If its a game state chaange, then check for end of game or round
+        if (propertiesThatChanged.ContainsKey(GAMESTATE_KEY))
+        {
+            OnGameStateChange();
+        }
     }
 
     #endregion
@@ -130,11 +144,20 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
     private void StartGame()
     {
         Debug.Log("StartGame!");
-        
-        // on rejoin, we have to figure out if the spaceship exists or not
-        // if this is a rejoin (the ship is already network instantiated and will be setup via event) we don't need to call PN.Instantiate
 
-        Transform spawn = spawnPointHelper.GetSpawnPoint(PhotonNetwork.LocalPlayer.ActorNumber-1);
+        //Raise event
+        OnGameStart.Invoke();
+
+        //Start the round
+        StartRound();
+    }
+
+    private void StartRound()
+    {
+        Debug.Log($"IsMasterClient : {PhotonNetwork.IsMasterClient}");
+        Debug.Log("StartRound!");
+
+        Transform spawn = spawnPointHelper.GetSpawnPoint(PhotonNetwork.LocalPlayer.ActorNumber - 1);
         Vector3 position = spawn.position;
         Quaternion rotation = spawn.rotation;
 
@@ -144,23 +167,26 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
             operatorName = (string)PhotonNetwork.LocalPlayer.CustomProperties[Constants.PLAYERKEYS.OPERATOR];
             Debug.LogWarning($"Selected Operator {operatorName}");
         }
-        
+
         //TODO: Update the player according to the player data
-        player = PhotonNetwork.Instantiate($"PhotonPrefabs/{operatorName}", position, rotation, 0);      // avoid this call on rejoin (ship was network instantiated before)
+        player = PhotonNetwork.Instantiate($"PhotonPrefabs/{operatorName}", position, rotation, 0);
         //player.GetComponent<Damageable>()?.OnDeath.AddListener(OnDeath);
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            Debug.Log("IsMasterClient");
+        //Raise event
+        OnRoundStart.Invoke();
+    }
 
-        }
-        else
-        {
-            Debug.Log("NotMasterClient");
-        }
+    private void EndRound()
+    {
+        //Destroy the player object
+        PhotonNetwork.Destroy(player);
+
+        //Reset elemets
+
+        //Start the round Timer
 
         //Raise event
-        OnGameStart.Invoke();
+        OnRoundEnd.Invoke();
     }
 
     private bool CheckAllPlayerLoadedLevel()
@@ -229,6 +255,11 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
         StartGame();
     }
 
+    public void OnRoundCountdownTimerIsExpired()
+    {
+        StartRound();
+    }
+
     public void OnDeath()
     {
         if (IsTesting)
@@ -248,7 +279,7 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
             return;
         }
         Debug.Log("Timer ended!");
-        GameEndReason("Timer Ended");
+        GameEndReason("Attacker");
     }
 
     public void OnDefend()
@@ -262,27 +293,49 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
         GameEndReason("Defender Won");
     }
 
-    private void GameEndReason(string reason)
+    private void GameEndReason(string winner)
     {
+        int attackerScore = 0;
+        int defenderScore = 0;
+
+        object attackerScoreObject = 0;
+        object defenderScoreObject = 0;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(ATTACKER_SCORE_KEY, out attackerScoreObject))
+            attackerScore = (int) attackerScoreObject;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(DEFENDER_SCORE_KEY, out defenderScoreObject))
+            defenderScore = (int) defenderScoreObject;
+
+        attackerScore++;
+
         Hashtable props = new Hashtable
         {
-            {"GameSatate", (int)2},
-            {"Reason", reason}
+            {GAMESTATE_KEY, (int)2},
+            {ATTACKER_SCORE_KEY, attackerScore},
+            {DEFENDER_SCORE_KEY, defenderScore},
+            {ROUND_WINNER_KEY, winner}
         };
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }
 
     private void OnGameStateChange()
     {
-        object gameStateFromProps;
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("GameSatate", out gameStateFromProps))
+        int attackerScore = 0;
+        int defenderScore = 0;
+
+        object attackerScoreObject = 0;
+        object defenderScoreObject = 0;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(ATTACKER_SCORE_KEY, out attackerScoreObject))
+            attackerScore = (int)attackerScoreObject;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(DEFENDER_SCORE_KEY, out defenderScoreObject))
+            defenderScore = (int)defenderScoreObject;
+
+        if (attackerScore > 2 || defenderScore > 2)
         {
-            int gamestate = (int)gameStateFromProps;
-            if(gamestate == 2)
-            {
-                //Game Over
-                OnGameOver();
-            }
+            OnGameOver();
+        }
+        else
+        {
+            EndRound();
         }
     }
 

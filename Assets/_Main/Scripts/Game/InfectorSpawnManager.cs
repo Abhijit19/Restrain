@@ -30,6 +30,15 @@ public class InfectorSpawnManager : MonoBehaviour
         return infector;
     }
 
+    public void RemoveInfector()
+    {
+        if(infector != null)
+        {
+            Destroy(infector);
+            infector = null;
+        }
+    }
+
     public void OnBeforeTransformParentChanged()
     {
 

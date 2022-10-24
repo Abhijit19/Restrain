@@ -56,6 +56,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
         Look();
         Move();
         //AbilityUpdate();
+
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            OnDeath();
+        }
+#endif
     }
 
     private void FixedUpdate()
@@ -130,15 +137,29 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (!photonView.IsMine)
             return;
         Debug.Log("Player died!");
-        GameEndReason("Attacker Won");
+        GameEndReason("Attacker");
     }
 
-    private void GameEndReason(string reason)
+    private void GameEndReason(string winner)
     {
+        int attackerScore = 0;
+        int defenderScore = 0;
+
+        object attackerScoreObject = 0;
+        object defenderScoreObject = 0;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RestrainGameManager.ATTACKER_SCORE_KEY, out attackerScoreObject))
+            attackerScore = (int)attackerScoreObject;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RestrainGameManager.DEFENDER_SCORE_KEY, out defenderScoreObject))
+            defenderScore = (int)defenderScoreObject;
+
+        attackerScore++;
+
         Hashtable props = new Hashtable
         {
-            {"GameSatate", (int)2},
-            {"Reason", reason}
+            {RestrainGameManager.GAMESTATE_KEY, (int)2},
+            {RestrainGameManager.ATTACKER_SCORE_KEY, attackerScore},
+            {RestrainGameManager.DEFENDER_SCORE_KEY, defenderScore},
+            {RestrainGameManager.ROUND_WINNER_KEY, winner}
         };
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }

@@ -22,7 +22,26 @@ public class Collectable : MonoBehaviour
             model?.SetActive(false);
             particle?.Stop();
 
-            Destroy(gameObject, 5);
+            WaitAndDeactivate();
         }
+    }
+
+    public IEnumerator WaitAndDeactivate()
+    {
+        yield return new WaitForSeconds(5);
+        Deactivate();
+    }
+
+    public void Deactivate()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void Activate()
+    {
+        StopAllCoroutines();    
+        gameObject.SetActive(true);
+        model?.SetActive(true);
+        particle?.Play();
     }
 }

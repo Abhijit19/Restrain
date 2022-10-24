@@ -57,6 +57,13 @@ namespace Photon.Pun.UtilityScripts
         /// </summary>
         public static event CountdownTimerHasExpired OnCountdownTimerHasExpired;
 
+#if UNITY_EDITOR
+        private void Awake()
+        {
+            Countdown = 5.0f;
+        }
+#endif
+
 
         public void Start()
         {
