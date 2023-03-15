@@ -34,10 +34,12 @@ public class InfectorSpawnManager : MonoBehaviour
     {
         if(infector != null)
         {
-            Destroy(infector);
+            PhotonNetwork.Destroy(infector);
+            //Destroy(infector);
             infector = null;
         }
     }
+
 
     public void OnBeforeTransformParentChanged()
     {
