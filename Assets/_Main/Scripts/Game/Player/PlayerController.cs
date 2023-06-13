@@ -84,8 +84,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * mouseSensitivity);
 
         verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
-        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
-
+        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -45f, 65f);
+        PlayerAnimator.SetFloat("vertical_Aim", .5f + (verticalLookRotation / 110));            //Update vertical aim property in the animator to look up wnd down.
         cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
         headTarget.transform.localEulerAngles = cameraHolder.transform.localEulerAngles;
     }
@@ -100,6 +100,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         //Send movement data to the animator.
         PlayerAnimator.SetFloat("x_vel",input.x*movementSpeed);
         PlayerAnimator.SetFloat("z_vel",input.z*movementSpeed);
+        //rifleEquipped(true);
         #region JUMP
         //is it on the ground
         if (controller.isGrounded)
@@ -125,10 +126,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
     /// <param name="wasEquipped"></param>
     public void rifleEquipped(bool wasEquipped)
     {
-        Debug.LogWarning("Rifle was equipped");
         PlayerAnimator.SetBool("hasRifle", wasEquipped);
-        if (wasEquipped) PlayerAnimator.SetLayerWeight(1, .9f);
-        else PlayerAnimator.SetLayerWeight(1, 0);
+        //if (wasEquipped) PlayerAnimator.SetLayerWeight(1, .9f);
+        //else PlayerAnimator.SetLayerWeight(1, 0);
     }
     /// <summary>
     /// Send Rifle Firing events to the Animator.
