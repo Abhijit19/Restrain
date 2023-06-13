@@ -82,6 +82,7 @@ public class FirstPersonController : MonoBehaviour
         move.y = yVelocity;
         //and finally move
         cc.Move(move * Time.deltaTime);
+
     }
 
 

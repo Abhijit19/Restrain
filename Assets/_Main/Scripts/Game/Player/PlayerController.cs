@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public bool isControllable = true;
     [SerializeField] GameObject headTarget;
     [SerializeField] GameObject cameraHolder;
+    [SerializeField] Animator PlayerAnimator;
     [SerializeField][Range(0.5f, 10f)]float mouseSensitivity = 5, defaultMovementSpeed = 5;
     float yVelocity = 0f;
     [SerializeField][Range(5f, 25f)]
@@ -74,6 +75,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             return;
         //and finally move
         controller.Move(move * Time.fixedDeltaTime);
+
     }
 
     private void Look()
@@ -95,6 +97,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
         //transofrm it based off the player transform and scale it by movement speed
         move = transform.TransformVector(input) * movementSpeed;
 
+        //Send movement data to the animator.
+        PlayerAnimator.SetFloat("x_vel",input.x*movementSpeed);
+        PlayerAnimator.SetFloat("z_vel",input.z*movementSpeed);
         #region JUMP
         //is it on the ground
         if (controller.isGrounded)
@@ -103,6 +108,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             //check for jump here
             if (Input.GetButtonDown("Jump"))
             {
+                PlayerAnimator.SetTrigger("Jump");
                 yVelocity = jumpSpeed;
             }
         }
@@ -110,9 +116,29 @@ public class PlayerController : MonoBehaviourPunCallbacks
         yVelocity -= gravity * Time.deltaTime;
         move.y = yVelocity;
         #endregion
-        
+
     }
 
+    /// <summary>
+    /// Sends Equip and unequip triggers to the animator.
+    /// </summary>
+    /// <param name="wasEquipped"></param>
+    public void rifleEquipped(bool wasEquipped)
+    {
+        Debug.LogWarning("Rifle was equipped");
+        PlayerAnimator.SetBool("hasRifle", wasEquipped);
+        if (wasEquipped) PlayerAnimator.SetLayerWeight(1, .9f);
+        else PlayerAnimator.SetLayerWeight(1, 0);
+    }
+    /// <summary>
+    /// Send Rifle Firing events to the Animator.
+    /// </summary>
+    public void rifleFired()
+    {
+        PlayerAnimator.SetTrigger("FireRifle");
+    }
+
+    
     public void Activate()
     {
         if (!photonView.IsMine)
@@ -137,6 +163,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (!photonView.IsMine)
             return;
         Debug.Log("Player died!");
+        PlayerAnimator.SetTrigger("ded");
+
         GameEndReason("Attacker");
     }
 

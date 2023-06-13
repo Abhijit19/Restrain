@@ -103,7 +103,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             fwd = transform.TransformDirection(Vector3.forward);
             fwd.y = 0;
             transform.position += fwd * playerSpeed * Time.deltaTime;
-            
 
         }
 

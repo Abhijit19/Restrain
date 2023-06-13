@@ -161,7 +161,8 @@ public class RestrainGameManager : MonoBehaviourPunCallbacks
         Vector3 position = spawn.position;
         Quaternion rotation = spawn.rotation;
 
-        string operatorName = "DefaultPlayer";
+        //string operatorName = "DefaultPlayer";
+        string operatorName = "AnimatedPlayerTest";                                                                     //MOD
         if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(Constants.PLAYERKEYS.OPERATOR))
         {
             operatorName = (string)PhotonNetwork.LocalPlayer.CustomProperties[Constants.PLAYERKEYS.OPERATOR];

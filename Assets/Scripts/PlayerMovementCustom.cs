@@ -35,7 +35,6 @@ public class PlayerMovementCustom : MonoBehaviourPun
         float xdir = Input.GetAxis("Horizontal");
         float ydir = Input.GetAxis("Vertical");
         transform.position += new Vector3(xdir, 0, ydir);
-
         rotX = Input.GetAxis("Mouse X");
         rotY -= Input.GetAxis("Mouse Y") * sensitivity;
         desiredrot = Mathf.Clamp(rotY, -90, 90);

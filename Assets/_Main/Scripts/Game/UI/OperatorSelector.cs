@@ -13,9 +13,9 @@ public class OperatorSelector : MonoBehaviour
             Debug.Log("Waiting for connection!");
             yield return null;
         } while (!PhotonNetwork.IsConnectedAndReady);
-        
+
         //Set player operator on start
-        string operatorName = PlayerPrefs.GetString(Constants.PLAYERKEYS.OPERATOR, "DefaultPlayer");
+        string operatorName = "AnimatedPlayerTest";//PlayerPrefs.GetString(Constants.PLAYERKEYS.OPERATOR, "AnimatedPlayerTest");           //MOD
         OnOperatorSelected(operatorName);
     }
 
