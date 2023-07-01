@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public bool isControllable = true;
     [SerializeField] GameObject headTarget;
     [SerializeField] GameObject cameraHolder;
+    [SerializeField] GameObject PlayerHeadObject;
     [SerializeField] Animator PlayerAnimator;
     [SerializeField][Range(0.5f, 10f)]float mouseSensitivity = 5, defaultMovementSpeed = 5;
     float yVelocity = 0f;
@@ -20,6 +21,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
     float jumpSpeed = 10f;
     float movementSpeed = 10f;
     float verticalLookRotation;
+    [SerializeField]
+    [Range(0f, 1f)]
+    float MovementAnimationDampening = 0.25f;
     Vector3 move;
 
     private CharacterController controller;
@@ -95,11 +99,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
         //update speed based onn the input
         Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
         //transofrm it based off the player transform and scale it by movement speed
-        move = transform.TransformVector(input) * movementSpeed;
-
+        if((move- transform.TransformVector(input) * movementSpeed).sqrMagnitude > .01f)
+            move = Vector3.Lerp(transform.TransformVector(input) * movementSpeed, move, MovementAnimationDampening) ;
+        else move = transform.TransformVector(input) * movementSpeed;
         //Send movement data to the animator.
-        PlayerAnimator.SetFloat("x_vel",input.x*movementSpeed);
-        PlayerAnimator.SetFloat("z_vel",input.z*movementSpeed);
+        float movementmagnitude = move.magnitude;
+        PlayerAnimator.SetFloat("x_vel",input.x*movementmagnitude);
+        PlayerAnimator.SetFloat("z_vel",input.z*movementmagnitude);
         //rifleEquipped(true);
         #region JUMP
         //is it on the ground
@@ -142,7 +148,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public void Activate()
     {
         if (!photonView.IsMine)
+        {
+            // Change player tag so the camera sees the complete player including his head. SH-LayerPlayerHead_ShadwsOff HS-LayerDefault_ShadowsOnly
+            if (PlayerHeadObject != null)
+                PlayerHeadObject.layer = 0;
             return;
+        }
         isControllable = true;
         cameraHolder.gameObject.SetActive(true);
         // Also reset the input values.

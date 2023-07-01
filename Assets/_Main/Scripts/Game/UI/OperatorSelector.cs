@@ -15,7 +15,7 @@ public class OperatorSelector : MonoBehaviour
         } while (!PhotonNetwork.IsConnectedAndReady);
 
         //Set player operator on start
-        string operatorName = PlayerPrefs.GetString(Constants.PLAYERKEYS.OPERATOR, "Swat");           //MOD
+        string operatorName = PlayerPrefs.GetString(Constants.PLAYERKEYS.OPERATOR, "Human");           //MOD
         OnOperatorSelected(operatorName);
     }
 
