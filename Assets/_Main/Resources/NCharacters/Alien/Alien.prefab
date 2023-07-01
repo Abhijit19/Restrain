@@ -447,7 +447,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.14
+  near clip plane: 0.1
   far clip plane: 100
   field of view: 69
   orthographic: 0
@@ -606,11 +606,13 @@ MonoBehaviour:
   isControllable: 1
   headTarget: {fileID: 7340563368028349942}
   cameraHolder: {fileID: 6992800130905144088}
+  PlayerHeadObject: {fileID: 0}
   PlayerAnimator: {fileID: 4022982497425601110}
   mouseSensitivity: 5
   defaultMovementSpeed: 5
   gravity: 25
   jumpSpeed: 10
+  MovementAnimationDampening: 0.25
   screenUI: {fileID: 6448840345794605655}
 --- !u!114 &667316578
 MonoBehaviour:
@@ -931,16 +933,16 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: hasRifle
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: FireRifle
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: Jump
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: ded
   - Type: 1
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: vertical_Aim
   m_SynchronizeLayers:
   - SynchronizeType: 1
@@ -1449,8 +1451,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6992800130905144088}
-  m_LocalRotation: {x: 0.000000008192386, y: 4.547473e-13, z: 8.09893e-12, w: 1}
-  m_LocalPosition: {x: 0.000016102873, y: 1.5366831, z: 0.228}
+  m_LocalRotation: {x: 0.000000008923542, y: 3.4106049e-13, z: 7.275824e-12, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5362132, z: 0.17159827}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1820,7 +1822,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8414031233584230730}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0.07, z: 1}
   m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_ConstrainProportionsScale: 0
   m_Children: []
