@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1832,6 +1831,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -2042,9 +2042,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedCharacter: 0
   allchars:
-  - {fileID: 7284156155009932952, guid: 2a520fda70f56df48b54c9f3e5f49af5, type: 3}
-  - {fileID: 4824920250422626347, guid: b3c596f5434c5ea4a8184683dc724d78, type: 3}
-  - {fileID: 7296901747853833934, guid: b5006bf3009f71a4882e49fb26e5ae9b, type: 3}
+  - {fileID: 6295301299811388153, guid: 8c67c2a42b1322d4cb748a8044f48972, type: 3}
+  - {fileID: 4202370881429204159, guid: 9c9efce1e43cebf4abe05bc0a8be8faf, type: 3}
+  - {fileID: 7699886677385663524, guid: c3b7848e53094c44ba6bec848bcd37fb, type: 3}
 --- !u!4 &1401527640
 Transform:
   m_ObjectHideFlags: 0

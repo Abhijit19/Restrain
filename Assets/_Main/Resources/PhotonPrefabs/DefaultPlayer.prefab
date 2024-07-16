@@ -785,10 +785,13 @@ MonoBehaviour:
   isControllable: 1
   headTarget: {fileID: 7340563368028349942}
   cameraHolder: {fileID: 6992800130905144088}
+  PlayerHeadObject: {fileID: 0}
+  PlayerAnimator: {fileID: 0}
   mouseSensitivity: 5
   defaultMovementSpeed: 5
   gravity: 25
   jumpSpeed: 10
+  MovementAnimationDampening: 0.25
   screenUI: {fileID: 6448840345794605655}
 --- !u!114 &667316578
 MonoBehaviour:
@@ -1444,6 +1447,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -2013,6 +2017,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0

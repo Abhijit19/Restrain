@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private CharacterController controller;
     public GameObject screenUI;
 
+    private bool IsPlayerAnimator { get { if (PlayerAnimator == null) Debug.LogWarning("Animator not available for this player"); return PlayerAnimator != null; } }
+
     private void Awake()
     {
         if (cameraHolder == null)
@@ -44,6 +46,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
             //Destroy the controller???
             //GameObject.Destroy(controller);
         }
+
+        if(PlayerAnimator == null)
+        {
+            PlayerAnimator = GetComponent<Animator>();
+        }
+
         //Set a name to game object
 #if UNITY_EDITOR
         if(photonView != null && photonView.Owner != null)
@@ -89,7 +97,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
         verticalLookRotation = Mathf.Clamp(verticalLookRotation, -45f, 65f);
-        PlayerAnimator.SetFloat("vertical_Aim", .5f + (verticalLookRotation / 110));            //Update vertical aim property in the animator to look up wnd down.
+        if (IsPlayerAnimator) PlayerAnimator.SetFloat("vertical_Aim", .5f + (verticalLookRotation / 110)); //Update vertical aim property in the animator to look up wnd down.
         cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
         headTarget.transform.localEulerAngles = cameraHolder.transform.localEulerAngles;
     }
@@ -104,8 +112,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
         else move = transform.TransformVector(input) * movementSpeed;
         //Send movement data to the animator.
         float movementmagnitude = move.magnitude;
-        PlayerAnimator.SetFloat("x_vel",input.x*movementmagnitude);
-        PlayerAnimator.SetFloat("z_vel",input.z*movementmagnitude);
+        if (IsPlayerAnimator) {
+            PlayerAnimator.SetFloat("x_vel", input.x * movementmagnitude);
+            PlayerAnimator.SetFloat("z_vel", input.z * movementmagnitude);
+        }
+
         //rifleEquipped(true);
         #region JUMP
         //is it on the ground
@@ -115,7 +126,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             //check for jump here
             if (Input.GetButtonDown("Jump"))
             {
-                PlayerAnimator.SetTrigger("Jump");
+                if (IsPlayerAnimator) PlayerAnimator.SetTrigger("Jump");
                 yVelocity = jumpSpeed;
             }
         }
@@ -132,7 +143,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     /// <param name="wasEquipped"></param>
     public void rifleEquipped(bool wasEquipped)
     {
-        PlayerAnimator.SetBool("hasRifle", wasEquipped);
+        if (IsPlayerAnimator) PlayerAnimator.SetBool("hasRifle", wasEquipped);
         //if (wasEquipped) PlayerAnimator.SetLayerWeight(1, .9f);
         //else PlayerAnimator.SetLayerWeight(1, 0);
     }
@@ -141,7 +152,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     /// </summary>
     public void rifleFired()
     {
-        PlayerAnimator.SetTrigger("FireRifle");
+        if (IsPlayerAnimator) PlayerAnimator.SetTrigger("FireRifle");
     }
 
     
@@ -174,7 +185,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (!photonView.IsMine)
             return;
         Debug.Log("Player died!");
-        PlayerAnimator.SetTrigger("ded");
+        if (IsPlayerAnimator) PlayerAnimator.SetTrigger("ded");
 
         GameEndReason("Attacker");
     }
